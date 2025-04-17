@@ -1,5 +1,6 @@
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
+from config import Config
 
 def get_transforms(is_training=True):
     if is_training:
@@ -7,8 +8,12 @@ def get_transforms(is_training=True):
         return A.Compose([
             # 首先进行调整大小，稍大一些以便进行随机裁剪
             A.Resize(height=224, width=224),
-            # 随机裁剪到192×192，提供位置多样性
-            A.RandomResizedCrop(height=192, width=192, scale=(0.8, 1.0)),
+            # 随机裁剪到Config.IMG_SIZE×Config.IMG_SIZE，提供位置多样性
+            A.RandomResizedCrop(
+                height=Config.IMG_SIZE, 
+                width=Config.IMG_SIZE,
+                scale=(0.8, 1.0)
+            ),
             # 水平和垂直翻转
             A.HorizontalFlip(p=0.5),
             A.VerticalFlip(p=0.3),
@@ -29,7 +34,7 @@ def get_transforms(is_training=True):
             # 调整为稍大尺寸
             A.Resize(height=212, width=212),
             # 从中心裁剪到目标尺寸
-            A.CenterCrop(height=192, width=192),
+            A.CenterCrop(height=Config.IMG_SIZE, width=Config.IMG_SIZE),
             # 规范化
             A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             # 转为tensor
@@ -44,10 +49,10 @@ def get_transforms_edge_aware(is_training=True):
             A.Resize(height=240, width=240),
             # 中心区域更大的随机裁剪，减少对边缘的依赖
             A.RandomResizedCrop(
-                height=192, 
-                width=192,  
+                height=Config.IMG_SIZE, 
+                width=Config.IMG_SIZE,
                 scale=(0.7, 0.9),  # 更集中的裁剪比例
-                ratio=(0.9, 1.1)    # 更接近正方形的裁剪
+                ratio=(0.9, 1.1)   # 更接近正方形的裁剪
             ),
             # 标准数据增强
             A.HorizontalFlip(p=0.5),
@@ -63,7 +68,7 @@ def get_transforms_edge_aware(is_training=True):
         return A.Compose([
             # 更激进的中心裁剪
             A.Resize(height=240, width=240),
-            A.CenterCrop(height=192, width=192),
+            A.CenterCrop(height=Config.IMG_SIZE, width=Config.IMG_SIZE),
             # 规范化
             A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             ToTensorV2(),
@@ -76,7 +81,7 @@ def get_transforms_cervix_specific(is_training=True):
             # 基础尺寸调整
             A.Resize(height=224, width=224),
             # 裁剪中心区域
-            A.CenterCrop(height=192, width=192),
+            A.CenterCrop(height=Config.IMG_SIZE, width=Config.IMG_SIZE),
             # 在中心裁剪基础上进行随机调整
             A.ShiftScaleRotate(
                 shift_limit=0.05,  # 小幅移动
@@ -103,7 +108,7 @@ def get_transforms_cervix_specific(is_training=True):
         return A.Compose([
             # 调整尺寸并进行中心裁剪
             A.Resize(height=224, width=224),
-            A.CenterCrop(height=192, width=192),
+            A.CenterCrop(height=Config.IMG_SIZE, width=Config.IMG_SIZE),
             # 规范化
             A.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
             ToTensorV2(),

@@ -5,7 +5,7 @@ from torchvision import datasets
 import os
 
 from config import Config
-from data.transforms import get_transforms_edge_aware
+from data.transforms import get_transforms_cervix_specific
 
 # 实现标准化Albumentation转换的自定义数据集类
 class AlbumentationsDataset(Dataset):
@@ -69,10 +69,10 @@ def load_datasets(data_path):
     )
     
     # 应用Albumentations转换
-    full_dataset = AlbumentationsDataset(full_dataset, get_transforms_edge_aware(is_training=False))
-    train_dataset = AlbumentationsDataset(train_dataset, get_transforms_edge_aware(is_training=True))
-    val_dataset = AlbumentationsDataset(val_dataset, get_transforms_edge_aware(is_training=False))
-    test_dataset = AlbumentationsDataset(test_dataset, get_transforms_edge_aware(is_training=False))
+    full_dataset = AlbumentationsDataset(full_dataset, get_transforms_cervix_specific(is_training=False))
+    train_dataset = AlbumentationsDataset(train_dataset, get_transforms_cervix_specific(is_training=True))
+    val_dataset = AlbumentationsDataset(val_dataset, get_transforms_cervix_specific(is_training=False))
+    test_dataset = AlbumentationsDataset(test_dataset, get_transforms_cervix_specific(is_training=False))
     
     return full_dataset, train_dataset, val_dataset, test_dataset, weighted_sampler
 

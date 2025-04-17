@@ -3,6 +3,8 @@ import torch.nn.functional as F
 import numpy as np
 from sklearn.metrics import precision_recall_curve, roc_auc_score, f1_score, precision_score, recall_score
 
+from config import Config
+
 def validate(model, loader, criterion):
     model.eval()
     running_loss = 0.0
@@ -14,7 +16,7 @@ def validate(model, loader, criterion):
     
     with torch.no_grad():
         for inputs, labels in loader:
-            inputs, labels = inputs.to(model.device), labels.to(model.device)
+            inputs, labels = inputs.to(Config.DEVICE), labels.to(Config.DEVICE)
             
             outputs = model(inputs)
             loss = criterion(outputs, labels)

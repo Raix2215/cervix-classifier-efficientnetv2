@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from config import Config
 from models.components import ConvBNAct, FusedMBConv, MBConv
 
 # EfficientNetV2-S配置
@@ -33,7 +34,7 @@ class EfficientNetV2(nn.Module):
                     else MBConv(in_c, out_c, stride if i == 0 else 1, exp_ratio, se_ratio, k)
                 )
                 in_c = out_c
-
+        self.device = Config.DEVICE
         self.blocks = nn.Sequential(*layers)
          # 修改为单独的组件，便于 CAM 访问最后的特征图
         self.conv_head = ConvBNAct(in_c, 1280, 1)
