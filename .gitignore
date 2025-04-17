@@ -178,3 +178,4 @@ cython_debug/
 Dataset/
 saved_models/
 logs_efficientnetv2/
+ALL_DATASET/
