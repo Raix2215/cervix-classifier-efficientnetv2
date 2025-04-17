@@ -7,3 +7,9 @@
 git clone https://github.com/Raix2215/cervix-classification-efficientnetv2.git
 cd cervix-classification-efficientnetv2
 pip install -r requirements.txt
+```
+
+## 训练日志
+```bash
+tensorboard --logdir logs_efficientnetv2
+```
